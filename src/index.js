@@ -4,10 +4,22 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css'
+import { BrowserRouter } from 'react-router-dom'
+import { createStore, applyMiddleware } from 'redux';
+import ReduxThunk from 'redux-thunk'
+import reducers from './redux/reducers'
+import { Provider } from 'react-redux'
+
+
+const store = createStore(reducers, {}, applyMiddleware (ReduxThunk))
 
 ReactDOM.render(
-
-    <App />
+  <Provider store={store}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </Provider>
+  
 ,
   document.getElementById('root')
 );
