@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useReducer } from 'react';
 import { APIURL } from './supports/ApiUrl'
 import axios from 'axios'
-import { Table } from 'reactstrap'
+import { Table, CustomInput } from 'reactstrap'
 
 
 import './App.css';
+
+//////////////////////////////////
 
 const initialState = {
   username: '',
@@ -18,7 +20,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         username: action.payload
       }
-    case 'PASSWORD' :
+    case 'password' :
       return {
         ...state,
         password: action.payload
@@ -33,21 +35,80 @@ function App() {
   const [ state, dispatch ] = useReducer (reducer, initialState)
   const [ data, setdata ] = useState ([])
 
+  const [ addimagefile, setimageadd ] = useState ({
+    addImageFileName: 'pilih foto..',
+    addImageFile: undefined,
+  })
+
   useEffect(() => {
-    axios.get(`${APIURL}/users/allusers`)
+    axios.get(`${APIURL}/foto/foto`)
     .then(response => {
       console.log(response.data)
       setdata(response.data)  // data dari back-end
     })
   }, [])
 
+  const onAddImageFileChange = (event) => {
+    console.log(event.target.files[0])
+    var file = event.target.files[0]
+    if (file) {
+        setimageadd(
+          {
+            ...addimagefile,
+            addImageFileName: file.name,
+            addImageFile: event.target.files[0]
+          }
+        )
+    } else {
+      setimageadd(
+        {
+          ...addimagefile,
+          addImageFileName:'pilih foto',
+          addImageFile: undefined
+        }
+      )
+    }
+}
+
+const addDataClick = () => {
+  var formData = new FormData()
+  const data = {
+    caption: state.password
+  }
+
+  var Headers = {
+    headers:
+    {
+      'Content-Type':'multipart/form-data'  //
+    }
+  }
+  formData.append('image',addimagefile.addImageFile)
+  formData.append('data',JSON.stringify(data))
+  axios.post(`${APIURL}/foto/foto/`, formData, Headers)
+  .then(response => {
+    setdata(response.data)
+  })
+  .catch(error => {
+    console.log(error)
+    alert(error)
+  })
+}
+
+const deleteUserDataHandler = (id) => {
+  axios.delete(`${APIURL}/users/users/${id}`)
+  .then(response => {
+    setdata(response.data)
+  })
+}
+
   const renderUsers = () => {
     return data.map((val, index) => {
       return (
         <tr key={index}>
           <td>{index + 1}</td>
-          <td>{val.username}</td>
-          <td>{val.password}</td>
+          <td>
+            <img src={APIURL + val.imagefoto} height='200px' alt='#'/></td>
+          <td>{val.caption}</td>
           <td>
             <button 
               className='btn btn-primary'
@@ -63,27 +124,7 @@ function App() {
     })
   }
 
-  const addNewDataUserHandler = () => {
-    let newDataUser = {
-      username: state.username,
-      password: state.password
-    }
-    axios.post(`${APIURL}/users/users/`, newDataUser)
-    .then(response => {
-      setdata(response.data)
-    })
-    .catch(error => {
-      console.log(error)
-      alert(error)
-    })
-  }
 
-  const deleteUserDataHandler = (id) => {
-    axios.delete(`${APIURL}/users/users/${id}`)
-    .then(response => {
-      setdata(response.data)
-    })
-  } 
 
   return (
     <div className='mt-5 mx-5'>
@@ -102,24 +143,24 @@ function App() {
         <tfoot>
           <tr>
             <td>
-              <input
-                type='text'
-                placeholder='Username'
-                value={state.username}
-                onChange={ event => dispatch ({ type: 'USERNAME', payload: event.target.value })}
+              <CustomInput
+                id='foto'
+                type='file'
+                label={addimagefile.addImageFileName}
+                onChange={ onAddImageFileChange}
                 /> </td>
             <td>
               <input
                 type='text'
-                placeholder='Password'
+                placeholder='caption'
                 value={state.password}
-                onChange={ event => dispatch ({ type: 'PASSWORD', payload: event.target.value })}
+                onChange={ event => dispatch ({ type: 'password', payload: event.target.value })}
                 /> </td>
             <td>
               <button 
                 className='btn btn-success'
-                onClick={addNewDataUserHandler}
-                >ADD NEW USER</button></td>
+                onClick={ addDataClick }
+                >ADD</button></td>
           </tr>
         </tfoot>
       </Table>
