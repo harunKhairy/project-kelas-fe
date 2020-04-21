@@ -40,7 +40,7 @@ const Header = (props) => {
               </DropdownToggle>
               <DropdownMenu right>
                 <DropdownItem>
-  { props.verified ? <span>VERIFIED</span> : <span style={{color:'red'}}>UNVERIFIED</span> }
+                { props.verified ? <span>VERIFIED</span> : <span style={{color:'red'}}>UNVERIFIED</span> }
                 </DropdownItem>
                 <DropdownItem>
                   Option 2

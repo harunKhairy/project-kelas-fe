@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useReducer } from 'react';
-import { APIURL } from '../supports/ApiUrl'
 import axios from 'axios'
+import { APIURL } from '../supports/ApiUrl'
 import { Table, CustomInput } from 'reactstrap'
 
 
@@ -13,7 +13,7 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'USERNAME' :
+    case 'USERNAME':
       return {
         ...state,
         username: action.payload

@@ -1,6 +1,6 @@
 
 
-const init = {
+const INIT = {
     username: '',
     email: '',
     status: '',
@@ -11,17 +11,17 @@ const init = {
     verified: 0
 }
 
-export default ( state = init, action ) => {
+export default ( state = INIT, action ) => {
     switch (action.type) {
         case 'USER_LOGIN_SUCCESS' :
             return {
-                ...init,
+                ...INIT,
                 ...action.payload,
                 authChecked: true
             }
         case 'AUTH_SYSTEM_ERROR' :
             return {
-                ...init,
+                ...INIT,
                 ...action.payload,
                 authChecked: true
             }
@@ -33,7 +33,7 @@ export default ( state = init, action ) => {
             }
         case 'USER_LOGOUT':
             return {
-                ...init,
+                ...INIT,
                 authChecked: true
             }
         default:

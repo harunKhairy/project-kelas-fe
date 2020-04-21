@@ -11,7 +11,7 @@ class Verified extends Component {
     }
 
     componentDidMount(){
-        console.log(this.props.search)
+        console.log(this.props.location.search)
         var obj = querystring.parse(this.props.location.search)
         console.log(obj)
         axios.put(`${APIURL}/users/verified`, obj)

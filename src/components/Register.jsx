@@ -25,7 +25,8 @@ class Register extends Component {
         axios.post(`${APIURL}/users/register`,data)
         .then((res)=>{
             console.log(res.data)
-            localStorage.setItem('userid', res.data.id)
+            // localStorage.setItem('userid', res.data.id)
+            localStorage.setItem('token', res.data.token)
             this.props.Userregister2(res.data)
         }).catch((err)=>{
             console.log(err)

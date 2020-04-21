@@ -23,10 +23,18 @@ function App (props) {
   const [ loading, setLoading ] = useState (true)
 
   useEffect (() => {
-    const userid = localStorage.getItem('userid')
-    if (userid) {
-      axios.get(`${APIURL}/users/keeplogin/${userid}`)
+    // const userid = localStorage.getItem('userid')
+    // if (userid) {
+    //   axios.get(`${APIURL}/users/keeplogin/${userid}`)
+    const token = localStorage.getItem('token')
+    if (token) {
+      axios.get(`${APIURL}/users/keeplogin`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
       .then(res => {
+        localStorage.setItem('token', res.data.token)
         props.Userregister2(res.data)
       })
       .catch(err => {
