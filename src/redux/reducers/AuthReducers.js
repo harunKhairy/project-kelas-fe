@@ -7,7 +7,8 @@ const init = {
     error: '',
     token: '',
     authChecked: false,
-    loading: false
+    loading: false,
+    verified: 0
 }
 
 export default ( state = init, action ) => {

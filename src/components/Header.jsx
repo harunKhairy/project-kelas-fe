@@ -13,6 +13,8 @@ import {
   DropdownItem,
   NavbarText
 } from 'reactstrap';
+import { connect } from 'react-redux'
+
 
 const Header = (props) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,18 +29,18 @@ const Header = (props) => {
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>
             <NavItem>
-              <NavLink href="/register">Register</NavLink>
+              <NavLink href="/register">REGISTER</NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="https://github.com/reactstrap/reactstrap">GitHub</NavLink>
+              <NavLink href="/login">LOGIN</NavLink>
             </NavItem>
             <UncontrolledDropdown nav inNavbar>
               <DropdownToggle nav caret>
-                Options
+                { props.username }
               </DropdownToggle>
               <DropdownMenu right>
                 <DropdownItem>
-                  Option 1
+  { props.verified ? <span>VERIFIED</span> : <span style={{color:'red'}}>UNVERIFIED</span> }
                 </DropdownItem>
                 <DropdownItem>
                   Option 2
@@ -57,4 +59,11 @@ const Header = (props) => {
   );
 }
 
-export default Header; 
+const reduxState = state => {
+  return {
+    username: state.Auth.username,
+    verified: state.Auth.verified
+  }
+}
+
+export default connect (reduxState) (Header); 
